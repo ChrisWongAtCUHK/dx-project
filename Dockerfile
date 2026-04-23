@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && curl https://sh.rustup.rs -sSf | sh -s -- -y \
   && . "$HOME/.cargo/env" \
-  && cargo install --locked dioxus-cli@0.6.0
+  && cargo install --locked dioxus-cli@0.6.0 \
+  && dx --version \
+  && dx build --release --platform fullstack
 
 WORKDIR /app
 COPY . .
 
-# 3. 執行編譯 (這會產生 target/release/render-dx-project 和 dist/ 目錄)
-RUN dx build --release --platform fullstack
 
 # --- 第二階段：執行環境 ---
 FROM debian:bookworm-slim
