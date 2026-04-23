@@ -7,11 +7,10 @@ RUN apt-get update && apt-get install -y \
   pkg-config \
   libssl-dev \
   git \
-  unzip \
   && rm -rf /var/lib/apt/lists/*
 
 # 2. 修正 Dioxus CLI 安裝網址 (原本的網址只有 github.com 會導致錯誤)
-RUN curl -sSL https://dioxus.dev/install.sh | bash
+RUN curl -L https://github.com/dioxuslabs/cli/releases/download/v0.6.0/dioxus-v0.6.0-x86\_64-unknown-linux-gnu.tar.gz | tar xz -C /usr/local/bin
 
 WORKDIR /app
 COPY . .
