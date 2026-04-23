@@ -14,7 +14,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # 【關鍵修正】使用腳本安裝 dx，避免 cargo install 編譯耗時
-RUN curl -sSL https://raw.githubusercontent.com/dioxuslabs/cli/main/install.sh | bash
+RUN curl -sSL https://raw.githubusercontent.com/DioxusLabs/dioxus/main/install.sh | bash
 
 # 編譯專案 (請確保使用了 --release 以優化效能)
 RUN dx build --release --platform web
