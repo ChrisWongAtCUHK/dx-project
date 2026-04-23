@@ -34,8 +34,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# 先拷貝整個 dist 目錄 (包含 index.html, wasm 等)
-COPY --from=builder /app/dist ./dist
+# 靜態資源（Wasm/JS/Assets）在這個路徑
+COPY --from=builder /app/target/dx/dx-project/release/web/public ./dist
+
+# Server 執行檔在它的上一層目錄
+# Dioxus 0.6 會將執行檔命名為與專案同名 (dx-project) 或 server
+COPY --from=builder /app/target/dx/dx-project/release/web/dx-project ./server
 
 # 自動搜尋執行檔並改名為 server
 # Dioxus 0.6 可能會把執行檔放在 target/dx/.../release/ 下
