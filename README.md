@@ -1,7 +1,7 @@
 ---
 title: Render Dx Project
 emoji: 🚀
-colorFrom: rust
+colorFrom: red
 colorTo: blue
 sdk: docker
 app_port: 7860
