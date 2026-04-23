@@ -1,6 +1,9 @@
 # --- 第一階段：編譯環境 (改用 Ubuntu 24.04 以支援新版 GLIBC) ---
 FROM ubuntu:24.04 AS builder
 
+WORKDIR /app
+COPY . /app
+
 # 1. 安裝系統依賴
 RUN apt-get update && apt-get install -y --no-install-recommends \
   curl build-essential ca-certificates gnupg dirmngr \
@@ -13,10 +16,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && cargo install --locked dioxus-cli@0.6.0 \
   && dx --version \
   && dx build --release --platform web
-
-WORKDIR /app
-COPY . .
-
 
 # --- 第二階段：執行環境 ---
 FROM debian:bookworm-slim
