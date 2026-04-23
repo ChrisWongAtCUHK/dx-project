@@ -4,18 +4,20 @@ FROM ubuntu:24.04 AS builder
 WORKDIR /app
 COPY . /app
 
-# 1. 安裝系統依賴
+# 安裝必要工具 (加入 unzip)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  curl build-essential ca-certificates gnupg dirmngr \
-  pkg-config \
-  libssl-dev \
-  git \
-  && rm -rf /var/lib/apt/lists/* \
-  && curl https://sh.rustup.rs -sSf | sh -s -- -y \
-  && . "$HOME/.cargo/env" \
-  && cargo install --locked dioxus-cli@0.6.0 \
-  && dx --version \
-  && dx build --release --platform web
+  curl build-essential ca-certificates pkg-config libssl-dev git unzip \
+  && rm -rf /var/lib/apt/lists/*
+
+# 安裝 Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# 【關鍵修正】使用腳本安裝 dx，避免 cargo install 編譯耗時
+RUN curl -sSL https://dioxus.dev | bash
+
+# 編譯專案 (請確保使用了 --release 以優化效能)
+RUN dx build --release --platform web
 
 # --- 第二階段：執行環境 ---
 FROM debian:bookworm-slim
