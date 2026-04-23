@@ -21,8 +21,8 @@ RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/ca
 # 這樣它內建的 wasm-bindgen 就能支援 0.2.100 以上
 RUN cargo binstall dioxus-cli
 
-# 編譯專案 (請確保使用了 --release 以優化效能)
-RUN dx build --release --platform web
+# 編譯專案 (Fullstack 模式)
+RUN dx build --release
 
 # --- 第二階段：執行環境 (改用 Ubuntu 確保 GLIBC 相容) ---
 FROM ubuntu:24.04
@@ -37,8 +37,10 @@ WORKDIR /app
 # 先拷貝整個 dist 目錄 (包含 index.html, wasm 等)
 COPY --from=builder /app/dist ./dist
 
-# 尋找並拷貝執行檔 (假設名稱為 dx-project，請根據實際情況修改)
-COPY --from=builder /app/target/release/dx-project ./server
+# 使用萬用字元拷貝執行檔，避免檔名寫錯
+# 這會把 target/release 下唯一的執行檔拷貝並命名為 server
+RUN --mount=type=bind,from=builder,source=/app/target/release,target=/release \
+  cp /release/render-dx-project ./server || cp /release/dx-project ./server
 
 # 設定執行權限
 RUN chmod +x ./server
