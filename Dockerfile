@@ -19,6 +19,9 @@ RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/ca
 # 2. 用 binstall 安裝 dx (直接下載二進制，不編譯)
 RUN cargo binstall dioxus-cli --version 0.6.0 -y
 
+# 修正版本衝突：將專案依賴降級至與 dx-cli 0.6.0 匹配的 0.2.99
+RUN cargo update -p wasm-bindgen --precise 0.2.99
+
 # 編譯專案 (請確保使用了 --release 以優化效能)
 RUN dx build --release --platform web
 
