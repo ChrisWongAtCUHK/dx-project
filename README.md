@@ -1,25 +1,17 @@
-# Development
+---
+title: Render Dx Project
+emoji: 🚀
+colorFrom: rust
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
-Your new bare-bones project includes minimal organization with a single `main.rs` file and a few assets.
+# Dioxus Fullstack on Hugging Face
 
-```
-project/
-├─ assets/ # Any assets that are used by the app should be placed here
-├─ src/
-│  ├─ main.rs # main.rs is the entry point to your application and currently contains all components for the app
-├─ Cargo.toml # The Cargo.toml file defines the dependencies and feature flags for your project
-```
+這是部署在 Hugging Face Spaces 上的 Dioxus 0.6/0.7 Fullstack 專案。
 
-### Serving Your App
-
-Run the following command in the root of your project to start developing with the default platform:
-
-```bash
-dx serve --platform web
-```
-
-To run for a different platform, use the `--platform platform` flag. E.g.
-```bash
-dx serve --platform desktop
-```
-
+## 部署說明
+- 使用 Docker SDK
+- 監聽埠號: 7860
