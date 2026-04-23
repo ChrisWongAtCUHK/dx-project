@@ -37,9 +37,10 @@ WORKDIR /app
 # 靜態資源（Wasm/JS/Assets）在這個路徑
 COPY --from=builder /app/target/dx/dx-project/release/web/public ./dist
 
-# Server 執行檔在它的上一層目錄
-# Dioxus 0.6 會將執行檔命名為與專案同名 (dx-project) 或 server
-COPY --from=builder /app/target/dx/dx-project/release/web/dx-project ./server
+# 直接從 web 目錄抓取執行檔
+# Dioxus 0.6 在 web 目錄下通常會生成一個名為 dx-project (無副檔名) 的執行檔
+# 我們用萬用字元確保能抓到它
+COPY --from=builder /app/target/dx/dx-project/release/web/dx-project* ./server
 
 # 自動搜尋執行檔並改名為 server
 # Dioxus 0.6 可能會把執行檔放在 target/dx/.../release/ 下
