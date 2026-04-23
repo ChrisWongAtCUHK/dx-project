@@ -37,8 +37,11 @@ WORKDIR /app
 # 先拷貝整個 dist 目錄 (包含 index.html, wasm 等)
 COPY --from=builder /app/dist ./dist
 
-# 專案名是 dx-project
-COPY --from=builder /app/target/dx/dx-project/release/server ./server
+# 自動搜尋執行檔並改名為 server
+# Dioxus 0.6 可能會把執行檔放在 target/dx/.../release/ 下
+RUN --mount=type=bind,from=builder,source=/app/target,target=/temp_target \
+  find /temp_target -type f -name "dx-project" -exec cp {} ./server \; || \
+  find /temp_target -type f -name "server" -exec cp {} ./server \;
 
 # 設定執行權限
 RUN chmod +x ./server
@@ -46,6 +49,7 @@ RUN chmod +x ./server
 # Hugging Face 規範
 ENV IP=0.0.0.0
 ENV PORT=7860
+ENV DIOXUS_ASSET_DIR=/app/dist
 EXPOSE 7860
 
 # 啟動伺服器
