@@ -13,8 +13,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# 【關鍵修正】使用腳本安裝 dx，避免 cargo install 編譯耗時
-RUN curl -sSL https://raw.githubusercontent.com/DioxusLabs/dioxus/main/install.sh | bash
+# 1. 先安裝 binstall (很快)
+RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
+# 2. 用 binstall 安裝 dx (直接下載二進制，不編譯)
+RUN cargo binstall dioxus-cli --version 0.6.0 -y
 
 # 編譯專案 (請確保使用了 --release 以優化效能)
 RUN dx build --release --platform web
