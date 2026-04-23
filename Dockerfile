@@ -17,10 +17,9 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
 # 2. 用 binstall 安裝 dx (直接下載二進制，不編譯)
-RUN cargo binstall dioxus-cli --version 0.6.0 -y
-
-# 修正版本衝突：將專案依賴降級至與 dx-cli 0.6.0 匹配的 0.2.99
-RUN cargo update -p wasm-bindgen --precise 0.2.99
+# 安裝最新的 dioxus-cli (目前建議不指定版本，或指定最新 v0.6.3+)
+# 這樣它內建的 wasm-bindgen 就能支援 0.2.100 以上
+RUN cargo binstall dioxus-cli
 
 # 編譯專案 (請確保使用了 --release 以優化效能)
 RUN dx build --release --platform web
