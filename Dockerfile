@@ -37,10 +37,8 @@ WORKDIR /app
 # 先拷貝整個 dist 目錄 (包含 index.html, wasm 等)
 COPY --from=builder /app/dist ./dist
 
-# 使用萬用字元拷貝執行檔，避免檔名寫錯
-# 這會把 target/release 下唯一的執行檔拷貝並命名為 server
-RUN --mount=type=bind,from=builder,source=/app/target/release,target=/release \
-  cp /release/render-dx-project ./server || cp /release/dx-project ./server
+# 專案名是 dx-project
+COPY --from=builder /app/target/dx/dx-project/release/server ./server
 
 # 設定執行權限
 RUN chmod +x ./server
