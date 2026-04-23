@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && . "$HOME/.cargo/env" \
   && cargo install --locked dioxus-cli@0.6.0 \
   && dx --version \
-  && dx build --release --platform fullstack
+  && dx build --release --platform web
 
 WORKDIR /app
 COPY . .
