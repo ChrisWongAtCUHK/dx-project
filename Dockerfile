@@ -24,8 +24,8 @@ RUN cargo binstall dioxus-cli
 # 編譯專案 (請確保使用了 --release 以優化效能)
 RUN dx build --release --platform web
 
-# --- 第二階段：執行環境 ---
-FROM debian:bookworm-slim
+# --- 第二階段：執行環境 (改用 Ubuntu 確保 GLIBC 相容) ---
+FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y \
   ca-certificates \
