@@ -1,5 +1,5 @@
-# --- 第一階段：編譯環境 ---
-FROM rust:1.81-slim AS builder
+# --- 第一階段：編譯環境 (改用 Ubuntu 24.04 以支援新版 GLIBC) ---
+FROM ubuntu:24.04 AS builder
 
 # 1. 安裝系統依賴
 RUN apt-get update && apt-get install -y \
