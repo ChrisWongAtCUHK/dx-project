@@ -35,7 +35,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # 靜態資源（Wasm/JS/Assets）在這個路徑
-COPY --from=builder /app/target/dx/dx-project/release/web/public ./dist
+# 將靜態資源目錄改名為 public (符合 Dioxus 預設要求)
+COPY --from=builder /app/target/dx/dx-project/release/web/public ./public
 
 # 直接從 web 目錄抓取執行檔
 # Dioxus 0.6 在 web 目錄下通常會生成一個名為 dx-project (無副檔名) 的執行檔
@@ -54,7 +55,8 @@ RUN chmod +x ./server
 # Hugging Face 規範
 ENV IP=0.0.0.0
 ENV PORT=7860
-ENV DIOXUS_ASSET_DIR=/app/dist
+ENV DIOXUS_ASSET_DIR=/app/public
+ENV DIOXUS_PUBLIC_DIR=/app/public
 EXPOSE 7860
 
 # 啟動伺服器
