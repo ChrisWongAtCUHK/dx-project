@@ -24,6 +24,12 @@ RUN cargo binstall dioxus-cli
 # 編譯專案 (Fullstack 模式)
 RUN dx build --release
 
+# 在 Builder 階段就先把東西準備好，避免第二階段路徑混亂
+RUN mkdir -p /app/ready_to_deploy && \
+  cp -r /app/target/dx/dx-project/release/web/public /app/ready_to_deploy/public && \
+  cp /app/target/dx/dx-project/release/web/dx-project /app/ready_to_deploy/server
+
+
 # --- 第二階段：執行環境 (改用 Ubuntu 確保 GLIBC 相容) ---
 FROM ubuntu:24.04
 
@@ -34,20 +40,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# 靜態資源（Wasm/JS/Assets）在這個路徑
-# 將靜態資源目錄改名為 public (符合 Dioxus 預設要求)
-COPY --from=builder /app/target/dx/dx-project/release/web/public ./public
-
-# 直接從 web 目錄抓取執行檔
-# Dioxus 0.6 在 web 目錄下通常會生成一個名為 dx-project (無副檔名) 的執行檔
-# 我們用萬用字元確保能抓到它
-COPY --from=builder /app/target/dx/dx-project/release/web/dx-project* ./server
-
-# 自動搜尋執行檔並改名為 server
-# Dioxus 0.6 可能會把執行檔放在 target/dx/.../release/ 下
-RUN --mount=type=bind,from=builder,source=/app/target,target=/temp_target \
-  find /temp_target -type f -name "dx-project" -exec cp {} ./server \; || \
-  find /temp_target -type f -name "server" -exec cp {} ./server \;
+# 直接從準備好的資料夾拷貝，保證結構絕對是 /app/public 和 /app/server
+COPY --from=builder /app/ready_to_deploy/ .
 
 # 設定執行權限
 RUN chmod +x ./server
