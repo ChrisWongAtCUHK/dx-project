@@ -1,5 +1,5 @@
 [package]
-name = "render-dx-project"
+name = "dx-project"
 version = "0.1.0"
 authors = ["Chris Wong <chris.wong.ksl@gmail.com>"]
 edition = "2021"

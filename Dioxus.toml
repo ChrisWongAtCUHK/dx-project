@@ -3,7 +3,7 @@
 [web.app]
 
 # HTML title tag content
-title = "render-dx-project"
+title = "dx-project"
 
 # include `assets` in web platform
 [web.resource]

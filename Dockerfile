@@ -36,7 +36,7 @@ WORKDIR /app
 
 # 4. 重要修正：移除第二階段的 dx build
 # 執行環境沒有 Rust 和 dx 指令，必須從 builder 階段拷貝成品
-COPY --from=builder /app/target/release/render-dx-project ./server
+COPY --from=builder /app/target/release/dx-project ./server
 COPY --from=builder /app/dist ./dist
 
 # 5. 設定執行權限
