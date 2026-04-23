@@ -2,16 +2,15 @@
 FROM ubuntu:24.04 AS builder
 
 # 1. 安裝系統依賴
-RUN apt-get update && apt-get install -y \
-  curl \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  curl build-essential ca-certificates gnupg dirmngr \
   pkg-config \
   libssl-dev \
   git \
-  && rm -rf /var/lib/apt/lists/*
-
-# 2. 修正 Dioxus CLI 安裝網址 (原本的網址只有 github.com 會導致錯誤)
-RUN curl -L -o /tmp/dioxus.tar.gz "https://github.com/dioxuslabs/cli/releases/download/v0.6.0/dioxus-v0.6.0-x86\_64-unknown-linux-gnu.tar.gz" \
-  && tar xzf /tmp/dioxus.tar.gz -C /usr/local/bin
+  && rm -rf /var/lib/apt/lists/* \
+  && curl https://sh.rustup.rs -sSf | sh -s -- -y \
+  && . "$HOME/.cargo/env" \
+  && cargo install --locked dioxus-cli@0.6.0
 
 WORKDIR /app
 COPY . .
