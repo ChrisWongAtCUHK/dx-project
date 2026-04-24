@@ -25,9 +25,13 @@ RUN cargo binstall dioxus-cli
 RUN dx build --release
 
 # 在 Builder 階段就先把東西準備好，避免第二階段路徑混亂
+# 動態抓取執行檔
 RUN mkdir -p /app/ready_to_deploy && \
   cp -r /app/target/dx/dx-project/release/web/public /app/ready_to_deploy/public && \
-  cp /app/target/dx/dx-project/release/web/dx-project /app/ready_to_deploy/server
+  # 這裡改成：去 web 目錄下找那個沒有副檔名的執行檔 (可能是 server 或 dx-project)
+  (cp /app/target/dx/dx-project/release/web/server /app/ready_to_deploy/server || \
+  cp /app/target/dx/dx-project/release/web/dx-project /app/ready_to_deploy/server)
+
 
 
 # --- 第二階段：執行環境 (改用 Ubuntu 確保 GLIBC 相容) ---
