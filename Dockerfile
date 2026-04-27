@@ -35,8 +35,6 @@ RUN mkdir -p /app/ready_to_deploy && \
   (cp /app/target/dx/dx-project/release/web/server /app/ready_to_deploy/server || \
   cp /app/target/dx/dx-project/release/web/dx-project /app/ready_to_deploy/server)
 
-
-
 # --- 第二階段：執行環境 (改用 Ubuntu 確保 GLIBC 相容) ---
 FROM ubuntu:24.04
 
@@ -64,4 +62,4 @@ EXPOSE 7860
 CMD ["./server"]
 
 # docker build -t dx-project .
-# docker run -p 7860:7860 dx-project
+# docker run -e RABBITMQ_URL -p 7860:7860 dx-project
