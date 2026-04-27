@@ -16,6 +16,9 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # 1. 先安裝 binstall (很快)
 RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
+# 必須安裝 wasm target
+RUN rustup target add wasm32-unknown-unknown
+
 # 用 binstall 安裝 dx (直接下載二進制，不編譯)
 # 安裝最新的 dioxus-cli (目前建議不指定版本，或指定最新 v0.6.3+)
 # 這樣它內建的 wasm-bindgen 就能支援 0.2.100 以上
@@ -59,3 +62,6 @@ EXPOSE 7860
 
 # 啟動伺服器
 CMD ["./server"]
+
+# docker build -t dx-project .
+# docker run -p 7860:7860 dx-project
